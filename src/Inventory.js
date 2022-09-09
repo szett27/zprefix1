@@ -4,8 +4,9 @@ import { useState } from "react"
 
 function Inventory(){
 
-    const [items, getItems] = useState({})
+    const [items, setItems] = useState({})
 
+    i
 
     return (
         <div>
