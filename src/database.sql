@@ -1,5 +1,5 @@
 CREATE TABLE users (
-    user_ID INT PRIMARY KEY,
+    user_ID SERIAL PRIMARY KEY,
     firstName   VARCHAR(50),
     lastName    VARCHAR(100),
     USER_NAME   VARCHAR(50),
@@ -8,7 +8,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE inventory (
-    item_ID INT PRIMARY KEY,
+    item_ID SERIAl PRIMARY KEY,
     item_Name   VARCHAR(100),
     description text,
     quantity    INT,
@@ -17,4 +17,7 @@ CREATE TABLE inventory (
 
 );
 
-INSERT INTO users(firstName, lastName, USER_NAME, PASSWORD) VALUES (sam, zett, szett27, 12345);
+
+
+INSERT INTO users(firstName, lastName, USER_NAME, PASSWORD) VALUES ('sam', 'zett', 'szett27', '12345');
+INSERT INTO inventory(item_Name, description, quantity, user_ID) VALUES ('Laptop', 'a small portbable computer', 10, 1)

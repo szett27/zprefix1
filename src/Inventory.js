@@ -6,8 +6,6 @@ function Inventory(){
 
     const [items, setItems] = useState({})
 
-    i
-
     return (
         <div>
             
