@@ -11,6 +11,8 @@ const pool = new Pool({
 })
 
 app.use(express.json())
+
+//Start with generic get routes
 //get all users
 app.get("/users", async(req, res)=>{
     try{
@@ -31,8 +33,20 @@ app.get("/inventory", async(req, res)=>{
     }
 })
 
-//delete item
-app.delete("/i")
+//create a user and item post route
+app.post("/users", async(req, res)=>{
+    try{
+        const firstName = req.body.firstName;
+        const lastName = req.body.lastName;
+        const USER_NAME = req.body.USER_NAME;
+        const PASSWORD = req.body.PASSWORD;
+
+        const newUser = await pool.query("INSERT INTO users (firstName, lastName, USER_NAME, PASSWORD) VALUES ($1, $2, $3, $4)", [firstName, lastName, USER_NAME, PASSWORD]);
+        console.log(req.body)
+    } catch(err){
+        console.error(err.message)
+    }
+})
 
 
 
