@@ -72,20 +72,11 @@ app.post("/users", async(req, res)=>{
 //     }
 // })
 
-app.delete("/users/:id", async(req, res)=>{
-    try{
-        const id = id;
-        const user =  await pool.query("DELETE * FROM users WHERE user_id = $1", [id]);
-        res.json(user.rows)
-    } catch(err){
-        console.error(err.message)
-    }
-})
 
 app.delete("/inventory/:id", async(req, res)=>{
     try{
-        const id = id;
-        const item =  await pool.query("DELETE * FROM inventory WHERE item_id = $1", [id]);
+        const id = req.params.id;
+        const item =  await pool.query("DELETE FROM inventory WHERE item_id = $1", [id]);
         res.json(allUsers.rows)
     } catch(err){
         console.error(err.message)

@@ -1,9 +1,12 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 
 
 function Inventory(){
 
+    //use effect for loading items?
+    //need to make a form editable
+    //useEffect()
     const [items, setItems] = useState({})
 
     return (
