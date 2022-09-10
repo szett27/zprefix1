@@ -33,6 +33,17 @@ app.get("/inventory", async(req, res)=>{
     }
 })
 
+//get all items a user is a manager 
+app.get("/users/id", async(req, res)=>{
+    try{
+        const userItems =  await pool.query("SELECT * FROM inventory WHERE user_id = $1", [id]);
+        res.json(userItems.rows)
+    } catch(err){
+        console.error(err.message)
+    }
+})
+
+
 //create a user and item post route
 app.post("/users", async(req, res)=>{
     try{
@@ -43,6 +54,28 @@ app.post("/users", async(req, res)=>{
 
         const newUser = await pool.query("INSERT INTO users (firstName, lastName, USER_NAME, PASSWORD) VALUES ($1, $2, $3, $4)", [firstName, lastName, USER_NAME, PASSWORD]);
         console.log(req.body)
+    } catch(err){
+        console.error(err.message)
+    }
+})
+
+// app.post("/inventory", async(req, res)=>{
+//     try{
+        
+//         //add json body description to inventory
+
+//         const newUser = await pool.query("INSERT INTO users (firstName, lastName, USER_NAME, PASSWORD) VALUES ($1, $2, $3, $4)", [firstName, lastName, USER_NAME, PASSWORD]);
+//         console.log(req.body)
+//     } catch(err){
+//         console.error(err.message)
+//     }
+// })
+
+app.delete("/users/id", async(req, res)=>{
+    try{
+        const id = id;
+        const allUsers =  await pool.query("DELETE * FROM users WHERE user_id = $1");
+        res.json(allUsers.rows)
     } catch(err){
         console.error(err.message)
     }
