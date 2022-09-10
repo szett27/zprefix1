@@ -36,6 +36,7 @@ app.get("/inventory", async(req, res)=>{
 //get all items a user is a manager 
 app.get("/users/id", async(req, res)=>{
     try{
+        const id = 
         const userItems =  await pool.query("SELECT * FROM inventory WHERE user_id = $1", [id]);
         res.json(userItems.rows)
     } catch(err){
