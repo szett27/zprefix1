@@ -34,9 +34,9 @@ app.get("/inventory", async(req, res)=>{
 })
 
 //get all items a user is a manager 
-app.get("/users/id", async(req, res)=>{
+app.get("/users/:id", async(req, res)=>{
     try{
-        const id = 
+        const id = req.params.id
         const userItems =  await pool.query("SELECT * FROM inventory WHERE user_id = $1", [id]);
         res.json(userItems.rows)
     } catch(err){
@@ -72,10 +72,20 @@ app.post("/users", async(req, res)=>{
 //     }
 // })
 
-app.delete("/users/id", async(req, res)=>{
+app.delete("/users/:id", async(req, res)=>{
     try{
         const id = id;
-        const allUsers =  await pool.query("DELETE * FROM users WHERE user_id = $1");
+        const user =  await pool.query("DELETE * FROM users WHERE user_id = $1", [id]);
+        res.json(user.rows)
+    } catch(err){
+        console.error(err.message)
+    }
+})
+
+app.delete("/inventory/:id", async(req, res)=>{
+    try{
+        const id = id;
+        const item =  await pool.query("DELETE * FROM inventory WHERE item_id = $1", [id]);
         res.json(allUsers.rows)
     } catch(err){
         console.error(err.message)
