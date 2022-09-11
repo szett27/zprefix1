@@ -80,7 +80,7 @@ app.delete("/inventory/:id", async(req, res)=>{
     try{
         const id = req.params.id;
         const item =  await pool.query("DELETE FROM inventory WHERE item_id = $1", [id]);
-        res.json(allUsers.rows)
+        res.json(item.rows)
     } catch(err){
         console.error(err.message)
     }
