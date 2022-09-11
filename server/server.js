@@ -60,17 +60,20 @@ app.post("/users", async(req, res)=>{
     }
 })
 
-// app.post("/inventory", async(req, res)=>{
-//     try{
+app.post("/inventory", async(req, res)=>{
+    try{
         
-//         //add json body description to inventory
+        const item_name = req.body.item_name;
+        const description = req.body.description;
+        const quantity = req.body.quantity;
+        const user_id = req.body.user_id;
 
-//         const newUser = await pool.query("INSERT INTO users (firstName, lastName, USER_NAME, PASSWORD) VALUES ($1, $2, $3, $4)", [firstName, lastName, USER_NAME, PASSWORD]);
-//         console.log(req.body)
-//     } catch(err){
-//         console.error(err.message)
-//     }
-// })
+        const newUser = await pool.query("INSERT INTO inventory (item_name, description, quantity, user_id) VALUES ($1, $2, $3, $4)", [item_name, description, quantity, user_id]);
+        console.log(req.body)
+    } catch(err){
+        console.error(err.message)
+    }
+})
 
 
 app.delete("/inventory/:id", async(req, res)=>{
