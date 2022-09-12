@@ -4,6 +4,7 @@ import Login from './Login.js';
 import NavBar from './NavBar';
 import Inventory from './Inventory';
 
+
 function App() {
 
   const [login, setLogin] = useState(false);
@@ -12,10 +13,9 @@ function App() {
   const [authorized, getAuthorized] = useState(true)
   return (
    <div>
-    <NavBar >
-    <h1>Z-Prefix CRUD APP</h1>
+   {/*<NavBar />*/} 
     <Login />
-    {authorized ? <Inventory /> : window.alert('Not authroized') }
+    <Inventory /> 
     {/* <Inventory /> */}
    </div>
   );

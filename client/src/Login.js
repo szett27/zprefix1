@@ -1,4 +1,3 @@
-import { useState } from "react";
 
 //Login page will allow a user to login
 //Login page will allow a user to create a new account
@@ -19,7 +18,7 @@ function Login(){
             <input type = "password" id = "password" />
         </form>
         <button type = "submit" onSubmit={()=>window.alert("Submitted")}>Submit</button>
-        <button>Create New Account</button>
+        <button>New Inventory Manager</button>
         </div>
     )
 }

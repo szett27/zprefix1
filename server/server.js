@@ -4,6 +4,7 @@ const express = require('express');
 const app = express();
 const port = process.env.port || 5000;
 const Pool = require('pg').Pool;
+const cors = require('cors')
 
 //need to change for actual Database
 const pool = new Pool({
@@ -11,6 +12,7 @@ const pool = new Pool({
 })
 
 app.use(express.json())
+app.use(cors())
 
 //Start with generic get routes
 //get all users
@@ -76,6 +78,24 @@ app.post("/inventory", async(req, res)=>{
 })
 
 
+//update an item's properties
+app.patch("/inventory/:id", async(req, res)=>{
+    try{
+        const item_name = req.body.item_name;
+        const description = req.body.description;
+        const quantity = req.body.quantity;
+        const user_id = req.body.user_id;
+            //look at body and see what's updated and not update
+
+        const updateItem = await pool.query("UPDATE inventory SET (item_name, description, quantity, user_id) VALUES($2, $3, $4) WHERE item_id = $1", [id, item_name, description, quantity, user_id])
+        console.log(updateItem.rows)
+    } catch(err){
+        console.error(err.message)
+    }
+});
+
+
+//delete an item based on it's id
 app.delete("/inventory/:id", async(req, res)=>{
     try{
         const id = req.params.id;
@@ -87,7 +107,5 @@ app.delete("/inventory/:id", async(req, res)=>{
 })
 
 
-
-//need to setup routes to comply with user stories
-
+//port should change went not in the dev environment
 app.listen(port, () => console.log(`Listening on port ${port}`))
