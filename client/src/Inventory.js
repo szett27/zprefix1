@@ -27,7 +27,7 @@ function Inventory(props){
         <div>
         {items.map((item, i)=>{
             return(
-            <div id = {i} onClick={()=> setSingleItem(item.item_id)}>
+            <div id = {i} className = "callout" onClick={()=> setSingleItem(item.item_id)} >
             <p contentEditable = {props.login}>{item.item_name}</p>
             <p contentEditable = {props.login}>{item.description}</p>
             <p contentEditable = {props.login}>Quantity: {item.quantity}</p>

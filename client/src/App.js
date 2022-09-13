@@ -1,5 +1,4 @@
 import {useState} from 'react';
-import './App.css';
 import Login from './Login.js';
 import NavBar from './NavBar';
 import Inventory from './Inventory';
@@ -17,6 +16,7 @@ function App() {
 
   return (
    <div>
+    <NavBar login = {login}/>
     {login ? <Inventory login ={login} userID = {userID} /> : <Login setLogin = {setLogin}/>}
    </div>
   );

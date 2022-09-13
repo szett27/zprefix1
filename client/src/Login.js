@@ -29,9 +29,9 @@ function Login(props){
     return(
         <div>
         <form id = "login" type = "submit" onSubmit={(e)=>authenticate(e)}>
-           <label>Username<input type = "text" id = "username" value = {user} onChange={(e)=>setUser(e.target.value)}/></label>
-            <label><input type = "password" id = "password" value = {password} onChange={(e)=>setPassword(e.target.value)} /></label>
-
+           <label>Username<input type = "text" id = "username" value = {user} onChange={(e)=>setUser(e.target.value)}/></label><br></br>
+            <label>Password<input type = "password" id = "password" value = {password} onChange={(e)=>setPassword(e.target.value)} /></label>
+            <br></br>
         <button type = "submit">Submit</button>
         </form>
         </div>
