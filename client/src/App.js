@@ -7,7 +7,7 @@ import Inventory from './Inventory';
 
 function App() {
 
-  const [login, setLogin] = useState(false);
+  const [login, setLogin] = useState(true);
   const [inventory, setinventory] = useState({id: '', status: 'false'});
 
   const [authorized, getAuthorized] = useState(true)
@@ -15,7 +15,7 @@ function App() {
    <div>
    {/*<NavBar />*/} 
     <Login />
-    <Inventory /> 
+    <Inventory login={login}/> 
     {/* <Inventory /> */}
    </div>
   );
