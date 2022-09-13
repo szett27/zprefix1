@@ -4,7 +4,8 @@ const express = require('express');
 const app = express();
 const port = process.env.port || 5000;
 const Pool = require('pg').Pool;
-const cors = require('cors')
+const cors = require('cors');
+const bcrypt = require('bcryptjs')
 
 //need to change for actual Database
 const pool = new Pool({
@@ -20,6 +21,19 @@ app.get("/users", async(req, res)=>{
     try{
         const allUsers =  await pool.query("SELECT * FROM users");
         res.json(allUsers.rows)
+    } catch(err){
+        console.error(err.message)
+    }
+})
+
+app.get("/users/login", async(req, res)=>{
+    try{
+        const [username, password] = req.params.body;
+        const User =  await pool.query("SELECT * FROM users WHERE user_name = $1", [username]);
+        if(User){
+            const validPassword = await bcrypt.compare(password, user.PASSWORD)
+            validPassword ? res.status(200).json(User) : console.log('Invalid');
+        }
     } catch(err){
         console.error(err.message)
     }
@@ -50,13 +64,16 @@ app.get("/users/:id", async(req, res)=>{
 //create a user and item post route
 app.post("/users", async(req, res)=>{
     try{
-        const firstName = req.body.firstName;
-        const lastName = req.body.lastName;
-        const USER_NAME = req.body.USER_NAME;
-        const PASSWORD = req.body.PASSWORD;
 
-        const newUser = await pool.query("INSERT INTO users (firstName, lastName, USER_NAME, PASSWORD) VALUES ($1, $2, $3, $4)", [firstName, lastName, USER_NAME, PASSWORD]);
-        console.log(req.body)
+        const firstName = req.body.firstname;
+        const lastName = req.body.lastname;
+        const USER_NAME = req.body.user_name;
+        const hash =  await bcrypt.hash(req.body.password, 1);     
+
+        console.log(hash)
+
+        const newUser = await pool.query("INSERT INTO users (firstName, lastName, user_name, password) VALUES ($1, $2, $3, $4)", [firstName, lastName, USER_NAME, hash]);
+        res.json(newUser.rows)
     } catch(err){
         console.error(err.message)
     }
@@ -69,6 +86,8 @@ app.post("/inventory", async(req, res)=>{
         const description = req.body.description;
         const quantity = req.body.quantity;
         const user_id = req.body.user_id;
+        
+       
 
         const newUser = await pool.query("INSERT INTO inventory (item_name, description, quantity, user_id) VALUES ($1, $2, $3, $4)", [item_name, description, quantity, user_id]);
         console.log(req.body)
