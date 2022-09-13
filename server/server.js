@@ -26,13 +26,17 @@ app.get("/users", async(req, res)=>{
     }
 })
 
-app.get("/users/login", async(req, res)=>{
+app.post("/login", async(req, res)=>{
     try{
-        const [username, password] = req.params.body;
-        const User =  await pool.query("SELECT * FROM users WHERE user_name = $1", [username]);
-        if(User){
-            const validPassword = await bcrypt.compare(password, user.PASSWORD)
-            validPassword ? res.status(200).json(User) : console.log('Invalid');
+        const username = req.body.username;
+        const password = req.body.password;
+    
+        const hash =  await pool.query("SELECT password FROM users WHERE user_name = $1", [username]);
+        let hashed = hash.rows[0].password
+
+        if(hashed){
+            const validPassword = await bcrypt.compare(password, hashed)
+            res.json(validPassword)
         }
     } catch(err){
         console.error(err.message)
