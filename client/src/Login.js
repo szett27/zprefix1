@@ -1,4 +1,4 @@
-
+import {useState} from 'react';
 //Login page will allow a user to login
 //Login page will allow a user to create a new account
 //Login will authenticate user against database
@@ -6,19 +6,34 @@
 
 
 
-function Login(){
+function Login(props){
 
-    // userName = useState()
-    //
+    const [authenticated, setAuthenticated] = useState(false)
+    const [user, setUser] = useState('');
+    const [password, setPassword] = useState('');
+
+   function authenticate(e){
+        e.preventDefault();
+        const data = {"username": user, "password": password}
+     
+        fetch('http://localhost:5000/login', 
+            {method: 'POST', 
+             headers: {
+            'Content-Type': 'application/json',
+          }, 
+          body: JSON.stringify(data)})
+        .then(res=>res.json())
+        .then(bool=>props.setLogin(bool))
+        }
 
     return(
         <div>
-        <form id = "login" type = "submit">
-            <input type = "text" id = "username" />
-            <input type = "password" id = "password" />
+        <form id = "login" type = "submit" onSubmit={(e)=>authenticate(e)}>
+           <label>Username<input type = "text" id = "username" value = {user} onChange={(e)=>setUser(e.target.value)}/></label>
+            <label><input type = "password" id = "password" value = {password} onChange={(e)=>setPassword(e.target.value)} /></label>
+
+        <button type = "submit">Submit</button>
         </form>
-        <button type = "submit" onSubmit={()=>window.alert("Submitted")}>Submit</button>
-        <button>New Inventory Manager</button>
         </div>
     )
 }
