@@ -16,7 +16,7 @@ function App() {
 
   return (
    <div>
-    <NavBar login = {login}/>
+    <NavBar setLogin = {setLogin} login = {login}/>
     {login ? <Inventory login ={login} userID = {userID} /> : <Login setLogin = {setLogin}/>}
    </div>
   );

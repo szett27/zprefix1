@@ -12,7 +12,7 @@ function Inventory(props){
     
 
 
-
+    const [editable, setEditable] = useState()
     const[singleItem, setSingleItem] = useState({ })
     const [items, setItems] = useState([])
     const devstring = 'http://localhost:5000'
@@ -27,11 +27,13 @@ function Inventory(props){
         <div>
         {items.map((item, i)=>{
             return(
-            <div id = {i} className = "callout" onClick={()=> setSingleItem(item.item_id)} >
-            <p contentEditable = {props.login}>{item.item_name}</p>
-            <p contentEditable = {props.login}>{item.description}</p>
+            <div id = {i} className = "card" onClick={()=> setSingleItem(item.item_id)} >
+            <div class = "card-body">
+            <h3 class = "card-title" contentEditable = {props.login}>{item.item_name}</h3>
+            <p class = "card-text" contentEditable = {props.login}>{item.description}</p>
             <p contentEditable = {props.login}>Quantity: {item.quantity}</p>
             {props.login ? updateButtons : <p>Coming Soon For Purchase!</p>}
+            </div>
             </div>
 
             )

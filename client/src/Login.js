@@ -7,14 +7,22 @@ import {useState} from 'react';
 
 
 function Login(props){
-
-    const [authenticated, setAuthenticated] = useState(false)
-    const [user, setUser] = useState('');
+    const [createUser, setCreateUser] = useState(false)
+    const [lastname, setLastName] = useState('');
+    const [firstname, setFirstName] = useState('');
+    const [username, setUserName] =useState('');
     const [password, setPassword] = useState('');
+
+    let newUser =<div>
+     <label>First Name<input class = 'form-control' type = "text" id = "firstname" value = {firstname} onChange={(e)=>setFirstName(e.target.value)}/></label><br></br>
+    <label>Last Name<input class = 'form-control' type = "text" id = "lastname" value = {lastname} onChange={(e)=>setLastName(e.target.value)} /></label>
+    </div>
+
+
 
    function authenticate(e){
         e.preventDefault();
-        const data = {"username": user, "password": password}
+        const data = {"username": username, "password": password}
      
         fetch('http://localhost:5000/login', 
             {method: 'POST', 
@@ -26,14 +34,30 @@ function Login(props){
         .then(bool=>props.setLogin(bool))
         }
 
+    function makeUser(e){
+            e.preventDefault();
+            const data = {"firstname": firstname, "lastname": lastname, "user_name": username, "password": password}
+            fetch('http://localhost:5000/register', 
+            {method: 'POST', 
+             headers: {
+            'Content-Type': 'application/json',
+          }, 
+          body: JSON.stringify(data)})
+        .then(res=>res.json())
+        .then(props.setLogin(true), setCreateUser(false))
+        }
+    
+
     return(
-        <div>
-        <form id = "login" type = "submit" onSubmit={(e)=>authenticate(e)}>
-           <label>Username<input type = "text" id = "username" value = {user} onChange={(e)=>setUser(e.target.value)}/></label><br></br>
-            <label>Password<input type = "password" id = "password" value = {password} onChange={(e)=>setPassword(e.target.value)} /></label>
+        <div class='form-group'>
+        <form id = "login" type = "submit" onSubmit={createUser ? (e)=>makeUser(e) : (e)=>authenticate(e)}>
+            {createUser ? newUser : ''}
+           <label>Username<input class = 'form-control' type = "text" id = "username" value = {username} onChange={(e)=>setUserName(e.target.value)}/></label><br></br>
+            <label>Password<input class = 'form-control' type = "password" id = "password" value = {password} onChange={(e)=>setPassword(e.target.value)} /></label>
             <br></br>
-        <button type = "submit">Submit</button>
+        <button type = "submit" class = "btn btn-primary">Submit</button>
         </form>
+        {!createUser ? <button type = "submit" class = "btn btn-primary" onClick ={()=>setCreateUser(true)}>Create New User</button> : ''}
         </div>
     )
 }

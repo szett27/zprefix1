@@ -7,12 +7,15 @@
 // </Box>
  function NavBar(props){
 
+    let signout = <button class = "btn btn-primary" onClick={()=>props.setLogin(false)}>Sign Out</button>
+    let login = <button class = "btn btn-primary" onClick={()=>props.setLogin(false)}></button>
+
+
     return (
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <span class="navbar-brand mb-0 h1">{props.login ? 'Inventory Management': 'Generic Storefront'}</span>
     <form class="form-inline my-2 my-lg-0">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">New Inventory Manager</button>
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">{props.login ? 'Sign Out' : 'Login'}</button>
+      {props.login ? signout : login}
 
     </form>
     </nav>
