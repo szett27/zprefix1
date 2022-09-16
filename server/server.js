@@ -6,6 +6,10 @@ const port = process.env.port || 5000;
 const Pool = require('pg').Pool;
 const cors = require('cors');
 const bcrypt = require('bcryptjs')
+const path = require('path')
+
+//use express to serve react app
+//app.use(express.static(path.join(__dirname, 'build')))
 
 //need to change for actual Database
 const pool = new Pool({
@@ -66,7 +70,7 @@ app.get("/users/:id", async(req, res)=>{
 
 
 //create a user and item post route
-app.post("/users", async(req, res)=>{
+app.post("/register", async(req, res)=>{
     try{
 
         const firstName = req.body.firstname;
@@ -83,7 +87,7 @@ app.post("/users", async(req, res)=>{
     }
 })
 
-app.post("/inventory", async(req, res)=>{
+app.post("/item", async(req, res)=>{
     try{
         
         const item_name = req.body.item_name;
@@ -102,15 +106,15 @@ app.post("/inventory", async(req, res)=>{
 
 
 //update an item's properties
-app.patch("/inventory/:id", async(req, res)=>{
+app.patch("/item", async(req, res)=>{
     try{
         const item_name = req.body.item_name;
         const description = req.body.description;
         const quantity = req.body.quantity;
-        const user_id = req.body.user_id;
+        const item_id = req.body.item_id;
             //look at body and see what's updated and not update
-
-        const updateItem = await pool.query("UPDATE inventory SET (item_name, description, quantity, user_id) VALUES($2, $3, $4) WHERE item_id = $1", [id, item_name, description, quantity, user_id])
+        console.log(description)
+        const updateItem = await pool.query("UPDATE inventory SET item_name = $2, description = $3,  quantity =$4 WHERE item_id = $1", [item_id, item_name, description, quantity])
         console.log(updateItem.rows)
     } catch(err){
         console.error(err.message)
@@ -119,7 +123,7 @@ app.patch("/inventory/:id", async(req, res)=>{
 
 
 //delete an item based on it's id
-app.delete("/inventory/:id", async(req, res)=>{
+app.delete("/delete/:id", async(req, res)=>{
     try{
         const id = req.params.id;
         const item =  await pool.query("DELETE FROM inventory WHERE item_id = $1", [id]);
