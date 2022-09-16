@@ -8,16 +8,14 @@ function App() {
 
   const [login, setLogin] = useState(false);
   const [userID, setUserID] = useState(0);
-  const [inventory, setinventory] = useState({id: '', status: 'false'});
 
-  const [authorized, getAuthorized] = useState(true)
 
-  console.log(`Login status: ${login}`)
 
   return (
    <div>
     <NavBar setLogin = {setLogin} login = {login}/>
-    {login ? <Inventory login ={login} userID = {userID} /> : <Login setLogin = {setLogin}/>}
+    {login ? <p>Welcome to the Inventory Management System</p> : <Login setLogin = {setLogin}/>}
+    <Inventory login ={login} setUserID = {setUserID} /> 
    </div>
   );
 }

@@ -31,8 +31,10 @@ function Login(props){
           }, 
           body: JSON.stringify(data)})
         .then(res=>res.json())
-        .then(bool=>props.setLogin(bool))
-        }
+        .then(bool=>{
+            //need to get userID on authenticanton props.setUserID()
+            props.setLogin(bool)})
+                }
 
     function makeUser(e){
             e.preventDefault();
