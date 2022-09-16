@@ -9,8 +9,6 @@ import { useEffect, useState } from "react"
 function Inventory(props){
 
    
-    
-    const [newItem, setNewItem] = useState(false)
     const [description, setDescription] = useState()
     const[quantity, setQuantity] = useState()
     const[item_name, setItemName] = useState()
@@ -26,8 +24,9 @@ function Inventory(props){
 
 
     let updateButtons = <div>           
-    <button onClick={()=>console.log('Deleted')}>Delete</button>
-    {!editable ? <button onClick={()=>setEditable(true)}>Edit</button>: <button onClick={()=>updateItem()}>Update {item_name}</button> }
+    <button onClick={(e)=>deleteItem(e)}>Delete</button>
+    {singleItem > 0 ? <button onClick={()=>setSingleItem(0)}>Back to Full Inventory</button>: ''}
+    {!editable ? <button onClick={()=>setEditable(true)}>Edit</button>: <div><button onClick={(e)=>updateItem(e)}>Update: {item_name}</button></div> }
     </div>;
 
 
@@ -41,15 +40,37 @@ function Inventory(props){
             </form>
         </div>;
 
+ 
+let oneItemView = 
+       <div>
+        <div class = "card-body">
+        <h3 class = "card-title" value = {item_name} onChange={(e)=>setItemName(e.target.value)}contentEditable = {editable}>{item_name}</h3>
+        <p class = "card-text" contentEditable = {editable}>{description}</p>
+        <p contentEditable = {editable} onChange={(e)=>setQuantity()}>Quantity: {quantity}</p>
+        {props.login ? updateButtons :   <button onClick={()=>setSingleItem(0)}>Back to Full Inventory</button> }
+        </div>
+</div>
 
 
-    let completeInventory = <div>
-    <button class = "btn btn-primary" style={{visibility: (props.login) ? 'visible' : 'hidden'} } onClick={()=>setNewItem(true)}>Create New Item</button>
+
+let completeInventory = <div>
     {items.map((item, i)=>{
         return(
-        <div id = {i} className = "card" onClick={()=> setSingleItem(item.item_id)} >
+        <div id = {i} className = "card" onClick={()=> {
+            setSingleItem(item.item_id);
+            setItemName(item.item_name);
+            setDescription(item.description)
+            setQuantity(item.quantity)
+            }}>
         <div class = "card-body">
-        <h3 class = "card-title" value = {item_name} onChange={(e)=>setItemName(e.target.value)}contentEditable = {editable}>{item.item_name}</h3>
+        <h3 class = "card-title" onClick = {()=>{
+            setSingleItem(item.item_id)
+            setItemName(item.item_name)
+            setDescription(item.description)
+            setQuantity(item.quantity)
+        }
+        } 
+        value = {item_name} onChange={(e)=>setItemName(e.target.value)}contentEditable = {editable}>{item.item_name}</h3>
         <p class = "card-text" contentEditable = {editable}>{item.description}</p>
         <p contentEditable = {editable} onChange={(e)=>setQuantity()}>Quantity: {item.quantity}</p>
         {props.login ? updateButtons : <p>Coming Soon For Purchase!</p>}
@@ -63,6 +84,12 @@ function Inventory(props){
 
 function deleteItem(e){
     e.preventDefault();
+   if(window.confirm(`Are you sure you want to delete ${item_name} ?`)){
+    fetch("http://localhost:5000/delete/" + singleItem, {method: 'DELETE'})
+    .then(res=>res.json())
+    .then(data=>console.log(data))
+    .then(window.refresh())
+   }
 }
 
 
@@ -93,30 +120,36 @@ function updateItem(e){
 		//"id": id,
 		"item_name": item_name,
 		"quantity": quantity,
-		"description" : description
+		"description" : description,
+        "item_id" : singleItem
 	}
 
-	fetch('/item', 
+    console.log(data)
+
+	fetch('http://localhost:5000/item', 
 	{
-	  method: 'POST',
+	  method: 'PATCH',
 	  headers: {'Content-Type': 'application/json'},
 	  body: JSON.stringify(data)
 
 	})
 	.then(res=>res.json())
-	.then(data=>window.alert(`Item: ${data.item_name} updated}`));
+	.then(data=>window.alert(`Item: ${data.item_name} updated}`))
+    .then(setEditable(false))
 }
 
    
-
-    if(createANewItem && props.login){
+    if(props.newItem && props.login){
         return(
             createANewItem
         )
     }
+  else if(singleItem > 0){
     return(
-        completeInventory
+        oneItemView
     )
+  }
+    return completeInventory
         
  }
 

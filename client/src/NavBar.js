@@ -18,14 +18,15 @@
 
     let signout = <button class = "btn btn-primary" onClick={()=>props.setLogin(false)}>Sign Out</button>
     let login = <button class = "btn btn-primary" onClick={()=>props.setLogin(false)}>Login</button>
-    
+    let newItem = <button class = "btn btn-primary" onClick={()=>props.setNewItem(false)}>New Item</button>
 
 
     return (
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <span class="navbar-brand mb-0 h1">{props.login ? 'Inventory Management': 'Generic Storefront'}</span>
+    <span class="navbar-brand mb-0 h1">{props.login ? 'Inventory Management': <a href = "/">Generic Storefront </a> }</span>
     <form class="form-inline my-2 my-lg-0">
     {props.login ? signout : login}
+    {props.newItem ? newItem : ''}
 
     </form>
     </nav>
