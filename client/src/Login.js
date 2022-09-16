@@ -33,7 +33,9 @@ function Login(props){
         .then(res=>res.json())
         .then(bool=>{
             //need to get userID on authenticanton props.setUserID()
-            props.setLogin(bool)})
+            props.setLogin(bool)
+            props.setDisplayLogin(false)
+            props.setNewItem(false)})
                 }
 
     function makeUser(e){
@@ -47,6 +49,8 @@ function Login(props){
           body: JSON.stringify(data)})
         .then(res=>res.json())
         .then(props.setLogin(true), setCreateUser(false))
+        .then(window.alert(`Welcome ${firstname + lastname} to the Inventory Manage`))
+        .then(props.setDisplayLogin(false))
         }
     
 
@@ -59,7 +63,7 @@ function Login(props){
             <br></br>
         <button type = "submit" class = "btn btn-primary">Submit</button>
         </form>
-        {!createUser ? <button type = "submit" class = "btn btn-primary" onClick ={()=>setCreateUser(true)}>Create New User</button> : ''}
+        {!createUser ?<div><br /><button type = "submit" class = "btn btn-primary" onClick ={()=>setCreateUser(true)}>Create New User</button></div> : ''}
         </div>
     )
 }

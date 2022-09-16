@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useReducer } from "react"
 
 
 
@@ -13,14 +13,15 @@ function Inventory(props){
     const[quantity, setQuantity] = useState()
     const[item_name, setItemName] = useState()
     const [editable, setEditable] = useState()
-    const[singleItem, setSingleItem] = useState({ })
+    const[singleItem, setSingleItem] = useState()
     const [items, setItems] = useState([])
+    const [ignored, forceUpdate] = useReducer(x=>x+1, 0)
     const devstring = 'http://localhost:5000'
     useEffect(()=>{
         fetch(devstring + '/inventory')
         .then((res)=>res.json())
         .then(data=> setItems(data))
-    }, []);
+    }, [forceUpdate]);
 
 
     let updateButtons = <div>           
@@ -37,6 +38,8 @@ function Inventory(props){
                 <label>Item Name<input value = {item_name}onChange ={(e)=>setItemName(e.target.value)}/></label>
                 <label>Description<input value = {description} onChange ={(e)=>setDescription(e.target.value)}/></label>
                 <label>Quantity<input type = 'text-field' value = {quantity} onChange ={(e)=>setQuantity(e.target.value)}/></label>
+                <button type = 'submit'>Create Item</button>
+                <button onClick={()=>props.setNewItem(false)}>Back to Full Inventory</button>
             </form>
         </div>;
 
@@ -56,12 +59,7 @@ let oneItemView =
 let completeInventory = <div>
     {items.map((item, i)=>{
         return(
-        <div id = {i} className = "card" onClick={()=> {
-            setSingleItem(item.item_id);
-            setItemName(item.item_name);
-            setDescription(item.description)
-            setQuantity(item.quantity)
-            }}>
+        <div id = {i} className = "card">
         <div class = "card-body">
         <h3 class = "card-title" onClick = {()=>{
             setSingleItem(item.item_id)
@@ -87,8 +85,7 @@ function deleteItem(e){
    if(window.confirm(`Are you sure you want to delete ${item_name} ?`)){
     fetch("http://localhost:5000/delete/" + singleItem, {method: 'DELETE'})
     .then(res=>res.json())
-    .then(data=>console.log(data))
-    .then(window.refresh())
+    .then(setSingleItem(0))
    }
 }
 
@@ -108,10 +105,9 @@ function createItem(e){
   }, 
   body: JSON.stringify(data)})
 .then(res=>res.json())
+.then(setSingleItem(0))
 .then(props.setNewItem(false))
 }
-
-
 
 
 function updateItem(e){
@@ -124,8 +120,6 @@ function updateItem(e){
         "item_id" : singleItem
 	}
 
-    console.log(data)
-
 	fetch('http://localhost:5000/item', 
 	{
 	  method: 'PATCH',
@@ -136,6 +130,7 @@ function updateItem(e){
 	.then(res=>res.json())
 	.then(data=>window.alert(`Item: ${data.item_name} updated}`))
     .then(setEditable(false))
+    .then(setSingleItem(0))
 }
 
    

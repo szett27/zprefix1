@@ -9,14 +9,16 @@ function App() {
   const [login, setLogin] = useState(false);
   const [userID, setUserID] = useState(0);
   const [newItem, setNewItem] = useState(false);
+  const [displayLogin, setDisplayLogin] = useState(false)
 
 
 
   return (
    <div>
-    <NavBar setLogin = {setLogin} login = {login} setNewItem = {setNewItem}/>
-    {login ? <p>Welcome to the Inventory Management System</p> : <Login setLogin = {setLogin}/>}
-    <Inventory login ={login} setUserID = {setUserID} newItem = {newItem} /> 
+    <NavBar setDisplayLogin = {setDisplayLogin} setLogin = {setLogin} login = {login} setNewItem = {setNewItem}/>
+    {login ? <p>Welcome to the Inventory Management System</p> :''}
+    {displayLogin ? <Login setLogin = {setLogin} setDisplayLogin = {setDisplayLogin}/> : ''}
+    <Inventory login ={login} setUserID = {setUserID} newItem = {newItem} setNewItem = {setNewItem} /> 
    </div>
   );
 }
